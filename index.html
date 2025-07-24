@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avaliação dos Palestrantes - SAE BRASIL</title>
+ 
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      text-align: left;
+    }
+
+    .header {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-weight: 400;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #63adb7, #b96ea5);
+      color: white;
+      padding: 45px 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      margin-bottom: 0;
+      opacity: 0.95;
+    }
+
+    .texto-h2{
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f7f7f7; 
+      color: #63adb7; 
+      padding: 23px; 
+      font-size: 2.0rem; 
+      text-align: left; 
+      margin-bottom: 0; 
+      margin-left: 150px; 
+      font-weight: bold;
+    }
+
+    /* Cards Section */
+    .cards-section {
+      background-color: #f7f7f7;
+      padding: 30px 20px;
+      min-height: calc(100vh - 300px);
+    }
+
+    .cards-section .container {
+      max-width: 1200px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background-color: white;
+      height: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: calc(100% - 200px);
+    }
+
+    .card-title {
+      font-weight: bold;
+      font-size: 1.3rem;
+      text-align: center;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .palestrante-info {
+      margin-bottom: 15px;
+    }
+
+    .palestrante-info p {
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .palestrante-info strong {
+      color: #333;
+    }
+
+    .linkedin-link {
+      color: #63adb7;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .linkedin-link:hover {
+      color: #b96ea5;
+      text-decoration: underline;
+    }
+
+    .avaliacao-section {
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+      margin-top: 15px;
+    }
+
+    .avaliacao-section h6 {
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .avaliacao-geral {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .estrelas {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .estrela {
+      font-size: 24px;
+      color: #ddd;
+      cursor: pointer;
+      transition: color 0.2s ease, transform 0.1s ease;
+      user-select: none;
+    }
+
+    .estrela:hover,
+    .estrela.ativa {
+      color: #ffd700;
+      transform: scale(1.1);
+    }
+
+    .nota-selecionada {
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: bold;
+      color: #333;
+      font-size: 1.1rem;
+    }
+
+    .btn-avaliar {
+      background: linear-gradient(135deg, #63adb7, #b96ea5);
+      color: white;
+      border: none;
+      font-weight: bold;
+      padding: 12px 24px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      margin-top: 15px;
+      width: 100%;
+    }
+
+    .btn-avaliar:hover {
+      background: linear-gradient(135deg, #b96ea5, #63adb7);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      color: white;
+    }
+
+    .btn-avaliar:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #9c9b9f;
+      color: white;
+      text-align: center;
+      padding: 30px 0;
+      margin-top: 50px;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    /* Modal para confirmação */
+    .modal-content {
+      border-radius: 15px;
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #63adb7, #b96ea5);
+      color: white;
+      border-radius: 15px 15px 0 0;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1024px) {
+      .texto-h2 {
+        margin-left: 100px;
+        font-size: 1.8rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 40px 15px;
+      }
+
+      .header h1 {
+        font-size: 2.2rem;
+      }
+
+      .header p {
+        font-size: 1rem;
+      }
+
+      .cards-section {
+        padding: 30px 15px;
+      }
+
+      .texto-h2 {
+        margin-left: 15px;
+        margin-right: 15px;
+        font-size: 1.8rem;
+        padding: 20px 15px;
+        text-align: center;
+      }
+
+      .card img {
+        height: 180px;
+      }
+
+      .card-body {
+        padding: 15px;
+        height: calc(100% - 180px);
+      }
+
+      .estrelas {
+        gap: 6px;
+      }
+
+      .estrela {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .header {
+        padding: 30px 10px;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .header p {
+        font-size: 0.9rem;
+      }
+
+      .cards-section {
+        padding: 20px 10px;
+      }
+
+      .texto-h2 {
+        font-size: 1.5rem;
+        padding: 15px 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+
+      .card img {
+        height: 160px;
+      }
+
+      .card-body {
+        padding: 12px;
+        height: calc(100% - 160px);
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+      }
+
+      .palestrante-info p {
+        font-size: 0.85rem;
+      }
+
+      .btn-avaliar {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+
+      .estrela {
+        font-size: 20px;
+      }
+
+      footer {
+        padding: 20px 0;
+      }
+
+      footer p {
+        font-size: 0.8rem;
+        padding: 0 10px;
+      }
+    }
+
+    @media (max-width: 375px) {
+      .header h1 {
+        font-size: 1.6rem;
+      }
+
+      .texto-h2 {
+        font-size: 1.3rem;
+      }
+
+      .card img {
+        height: 140px;
+      }
+
+      .card-body {
+        height: calc(100% - 140px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1>SAE BRASIL</h1>
+    <p>Sistema de Avaliação dos Palestrantes</p>
+  </div>
+
+  <!-- Texto -->
+  <h2 class="texto-h2">
+    Avalie os palestrantes:
+  </h2>
+
+  <!-- Cards Section -->
+  <div class="cards-section" style="margin-top: 0;">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="palestrantes-container">
+        <!-- Os cards serão inseridos aqui via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmação -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">Confirmação de Avaliação</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Tem certeza que deseja enviar esta avaliação?</p>
+          <div id="resumo-avaliacao"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn" style="background: linear-gradient(135deg, #63adb7, #b96ea5); color: white;" onclick="confirmarAvaliacao()">Confirmar Avaliação</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Pertalks | Sistema de Avaliação SAE BRASIL</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Dados de exemplo dos palestrantes
+    const palestrantes = [
+      {
+        id: 1,
+        nome: "Dr. Carlos Silva",
+        empresa: "Tech Automotive",
+        linkedin: "linkedin.com/in/carlos-silva",
+        palestra: "Inovações em Veículos Elétricos",
+        foto: "https://via.placeholder.com/400x200/63adb7/ffffff?text=Dr.+Carlos+Silva"
+      },
+      {
+        id: 2,
+        nome: "Eng. Maria Santos",
+        empresa: "Green Motors",
+        linkedin: "linkedin.com/in/maria-santos",
+        palestra: "Sustentabilidade na Mobilidade Urbana",
+        foto: "https://via.placeholder.com/400x200/b96ea5/ffffff?text=Eng.+Maria+Santos"
+      },
+      {
+        id: 3,
+        nome: "Prof. João Oliveira",
+        empresa: "Universidade Federal",
+        linkedin: "linkedin.com/in/joao-oliveira",
+        palestra: "Inteligência Artificial em Veículos Autônomos",
+        foto: "https://via.placeholder.com/400x200/8e73b3/ffffff?text=Prof.+João+Oliveira"
+      },
+      {
+        id: 4,
+        nome: "Dra. Ana Costa",
+        empresa: "Future Mobility",
+        linkedin: "linkedin.com/in/ana-costa",
+        palestra: "Materiais Avançados na Indústria Automotiva",
+        foto: "https://via.placeholder.com/400x200/6373ad/ffffff?text=Dra.+Ana+Costa"
+      },
+      {
+        id: 5,
+        nome: "Eng. Pedro Lima",
+        empresa: "Smart Transport",
+        linkedin: "linkedin.com/in/pedro-lima",
+        palestra: "IoT e Conectividade Veicular",
+        foto: "https://via.placeholder.com/400x200/d2691e/ffffff?text=Eng.+Pedro+Lima"
+      },
+      {
+        id: 6,
+        nome: "Dra. Lucia Ferreira",
+        empresa: "EcoMobility",
+        linkedin: "linkedin.com/in/lucia-ferreira",
+        palestra: "Biocombustíveis e Energia Limpa",
+        foto: "https://via.placeholder.com/400x200/20b2aa/ffffff?text=Dra.+Lucia+Ferreira"
+      }
+    ];
+
+    // Critérios de avaliação - simplificado para avaliação geral
+    const textoAvaliacao = 'Como você avalia esse participante?';
+
+    let avaliacaoAtual = {};
+    let palestranteAtual = null;
+
+    // Função para criar as estrelas
+    function criarEstrelas(palestranteId) {
+      let estrelasHtml = '';
+      for (let i = 1; i <= 5; i++) {
+        estrelasHtml += `<span class="estrela" data-palestrante="${palestranteId}" data-valor="${i}" onclick="avaliarEstrela(${palestranteId}, ${i})">★</span>`;
+      }
+      return estrelasHtml;
+    }
+
+    // Função para avaliar estrela
+    function avaliarEstrela(palestranteId, valor) {
+      avaliacaoAtual[palestranteId] = valor;
+
+      // Atualizar visual das estrelas
+      const estrelas = document.querySelectorAll(`[data-palestrante="${palestranteId}"]`);
+      estrelas.forEach((estrela, index) => {
+        if (index < valor) {
+          estrela.classList.add('ativa');
+        } else {
+          estrela.classList.remove('ativa');
+        }
+      });
+
+      // Mostrar nota selecionada
+      const notaElement = document.getElementById(`nota-${palestranteId}`);
+      if (notaElement) {
+        const textos = ['', 'Péssimo', 'Ruim', 'Regular', 'Bom', 'Excelente'];
+        notaElement.innerHTML = `Sua nota: ${valor} ⭐ - ${textos[valor]}`;
+      }
+      
+      // Habilitar botão de envio
+      const btnAvaliar = document.getElementById(`btn-avaliar-${palestranteId}`);
+      if (btnAvaliar) {
+        btnAvaliar.disabled = false;
+        btnAvaliar.textContent = 'Enviar Avaliação';
+      }
+    }
+
+    // Função para enviar avaliação
+    function enviarAvaliacao(palestranteId) {
+      const nota = avaliacaoAtual[palestranteId];
+      if (!nota) {
+        alert('Por favor, selecione uma nota antes de enviar.');
+        return;
+      }
+
+      palestranteAtual = palestrantes.find(p => p.id === palestranteId);
+      
+      // Mostrar resumo no modal
+      const textos = ['', 'Péssimo', 'Ruim', 'Regular', 'Bom', 'Excelente'];
+      let resumoHtml = `<strong>${palestranteAtual.nome}</strong><br><br>`;
+      resumoHtml += `Sua avaliação: ${nota} ⭐ - ${textos[nota]}`;
+      
+      document.getElementById('resumo-avaliacao').innerHTML = resumoHtml;
+      
+      // Mostrar modal
+      const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+      modal.show();
+    }
+
+    // Função para confirmar avaliação
+    function confirmarAvaliacao() {
+      const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
+      modal.hide();
+
+      // Simular envio (aqui você conectaria com Google Sheets)
+      alert('Avaliação enviada com sucesso! Obrigado pelo seu feedback.');
+
+      // Desabilitar o card após avaliação
+      const card = document.getElementById(`card-${palestranteAtual.id}`);
+      card.style.opacity = '0.6';
+      card.style.pointerEvents = 'none';
+      
+      const btnAvaliar = document.getElementById(`btn-avaliar-${palestranteAtual.id}`);
+      btnAvaliar.textContent = 'Avaliado ✓';
+      btnAvaliar.style.background = '#28a745';
+    }
+
+    // Função para renderizar palestrantes
+    function renderizarPalestrantes() {
+      const container = document.getElementById('palestrantes-container');
+      
+      palestrantes.forEach(palestrante => {
+        const cardHtml = `
+          <div class="col">
+            <div class="card" id="card-${palestrante.id}">
+              <img src="${palestrante.foto}" alt="${palestrante.nome}">
+              <div class="card-body">
+                <h5 class="card-title">${palestrante.nome}</h5>
+                
+                <div class="palestrante-info">
+                  <p><strong>Empresa:</strong> ${palestrante.empresa}</p>
+                  <p><strong>LinkedIn:</strong> <a href="https://${palestrante.linkedin}" target="_blank" class="linkedin-link">${palestrante.linkedin}</a></p>
+                  <p><strong>Palestra:</strong> ${palestrante.palestra}</p>
+                </div>
+
+                <div class="avaliacao-section">
+                  <h6>${textoAvaliacao}</h6>
+                  
+                  <div class="avaliacao-geral">
+                    <div class="estrelas">
+                      ${criarEstrelas(palestrante.id)}
+                    </div>
+                    
+                    <div class="nota-selecionada" id="nota-${palestrante.id}">
+                      Selecione uma nota
+                    </div>
+                  </div>
+                  
+                  <button class="btn-avaliar" id="btn-avaliar-${palestrante.id}" onclick="enviarAvaliacao(${palestrante.id})" disabled>
+                    Selecione uma nota
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        container.innerHTML += cardHtml;
+      });
+    }
+
+    // Inicializar página
+    document.addEventListener('DOMContentLoaded', function() {
+      renderizarPalestrantes();
+    });
+  </script>
+</body>
+</html>
