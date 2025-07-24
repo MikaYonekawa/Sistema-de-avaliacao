@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administração - Cadastro de Palestrantes - SAE BRASIL</title>
+ 
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      text-align: left;
+    }
+
+    .header {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-weight: 400;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #63adb7, #b96ea5);
+      color: white;
+      padding: 45px 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      margin-bottom: 0;
+      opacity: 0.95;
+    }
+
+    .admin-badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    .main-section {
+      background-color: #f7f7f7;
+      padding: 40px 20px;
+      min-height: calc(100vh - 300px);
+    }
+
+    .form-container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      color: #63adb7;
+      font-size: 2.2rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      color: #333;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .form-control, .form-select {
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      padding: 12px 15px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #63adb7;
+      box-shadow: 0 0 0 0.25rem rgba(99, 173, 183, 0.25);
+    }
+
+    .foto-preview {
+      width: 200px;
+      height: 120px;
+      border: 2px dashed #ddd;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      background-color: #f8f9fa;
+      color: #666;
+      font-size: 0.9rem;
+      overflow: hidden;
+    }
+
+    .foto-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .btn-group-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #63adb7, #b96ea5);
+      border: none;
+      padding: 15px 40px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #b96ea5, #63adb7);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      border: none;
+      padding: 15px 40px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #63adb7;
+      color: #63adb7;
+      padding: 15px 40px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+
+    .btn-outline:hover {
+      background: #63adb7;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .palestrantes-list {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      margin-top: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .list-title {
+      color: #b96ea5;
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .palestrante-item {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-left: 4px solid #63adb7;
+      transition: all 0.3s ease;
+    }
+
+    .palestrante-item:hover {
+      background: #e9ecef;
+      transform: translateX(5px);
+    }
+
+    .palestrante-name {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .palestrante-details {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .btn-edit, .btn-delete {
+      padding: 5px 15px;
+      font-size: 0.8rem;
+      border-radius: 15px;
+      margin-right: 10px;
+    }
+
+    .btn-edit {
+      background: #ffc107;
+      border: none;
+      color: #212529;
+    }
+
+    .btn-delete {
+      background: #dc3545;
+      border: none;
+      color: white;
+    }
+
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #28a745;
+      display: none;
+    }
+
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #dc3545;
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #9c9b9f;
+      color: white;
+      text-align: center;
+      padding: 30px 0;
+      margin-top: 50px;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .header {
+        padding: 30px 15px;
+      }
+
+      .header h1 {
+        font-size: 2.2rem;
+      }
+
+      .header p {
+        font-size: 1rem;
+      }
+
+      .main-section {
+        padding: 30px 15px;
+      }
+
+      .form-container {
+        padding: 30px 20px;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+      }
+
+      .btn-group-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-primary, .btn-secondary, .btn-outline {
+        min-width: 250px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .header {
+        padding: 25px 10px;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .form-container {
+        padding: 20px 15px;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+
+      .palestrantes-list {
+        padding: 20px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1>SAE BRASIL</h1>
+    <p>Painel de Administração</p>
+    <div class="admin-badge"> Acesso Administrador</div>
+  </div>
+
+  <!-- Main Section -->
+  <div class="main-section">
+    <div class="container">
+      <!-- Formulário de Cadastro -->
+      <div class="form-container">
+        <h2 class="section-title">Cadastrar Novo Palestrante</h2>
+        
+        <!-- Mensagens de sucesso/erro -->
+        <div class="success-message" id="successMessage">
+          ✅ Palestrante cadastrado com sucesso!
+        </div>
+        <div class="error-message" id="errorMessage">
+          ❌ Por favor, preencha todos os campos obrigatórios.
+        </div>
+
+        <form id="cadastroPalestrante">
+          <!-- Nome -->
+          <div class="form-group">
+            <label for="nome" class="form-label">Nome Completo *</label>
+            <input type="text" class="form-control" id="nome" placeholder="Ex: Dr. Carlos Silva" required>
+          </div>
+
+          <!-- Foto URL -->
+          <div class="form-group">
+            <label for="foto" class="form-label">URL da Foto</label>
+            <input type="url" class="form-control" id="foto" placeholder="https://exemplo.com/foto.jpg" onchange="previewFoto()">
+            <div class="foto-preview" id="fotoPreview">
+              📷 Preview da foto aparecerá aqui
+            </div>
+          </div>
+
+          <!-- Empresa -->
+          <div class="form-group">
+            <label for="empresa" class="form-label">Empresa/Organização *</label>
+            <input type="text" class="form-control" id="empresa" placeholder="Ex: Tech Automotive" required>
+          </div>
+
+          <!-- LinkedIn -->
+          <div class="form-group">
+            <label for="linkedin" class="form-label">LinkedIn</label>
+            <input type="text" class="form-control" id="linkedin" placeholder="linkedin.com/in/seu-perfil">
+          </div>
+
+          <!-- Palestra -->
+          <div class="form-group">
+            <label for="palestra" class="form-label">Título da Palestra *</label>
+            <input type="text" class="form-control" id="palestra" placeholder="Ex: Inovações em Veículos Elétricos" required>
+          </div>
+
+          <!-- Botões de Ação -->
+          <div class="btn-group-actions">
+            <button type="submit" class="btn btn-primary">
+             Cadastrar Palestrante
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="limparFormulario()">
+              Limpar Formulário
+            </button>
+            <button type="button" class="btn btn-outline" onclick="voltarParaAvaliacao()">
+              ← Voltar para Avaliações
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Lista de Palestrantes Cadastrados -->
+      <div class="palestrantes-list">
+        <h3 class="list-title">Palestrantes Cadastrados</h3>
+        <div id="listaPalestrantes">
+          <!-- Os palestrantes serão listados aqui -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Pertalks | Sistema de Administração SAE BRASIL</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Array para armazenar palestrantes (em produção, conectaria com banco de dados)
+    let palestrantes = [
+      {
+        id: 1,
+        nome: "Dr. Carlos Silva",
+        empresa: "Tech Automotive",
+        linkedin: "linkedin.com/in/carlos-silva",
+        palestra: "Inovações em Veículos Elétricos",
+        foto: "https://via.placeholder.com/400x200/63adb7/ffffff?text=Dr.+Carlos+Silva"
+      },
+      {
+        id: 2,
+        nome: "Eng. Maria Santos",
+        empresa: "Green Motors",
+        linkedin: "linkedin.com/in/maria-santos",
+        palestra: "Sustentabilidade na Mobilidade Urbana",
+        foto: "https://via.placeholder.com/400x200/b96ea5/ffffff?text=Eng.+Maria+Santos"
+      },
+      {
+        id: 3,
+        nome: "Prof. João Oliveira",
+        empresa: "Universidade Federal",
+        linkedin: "linkedin.com/in/joao-oliveira",
+        palestra: "Inteligência Artificial em Veículos Autônomos",
+        foto: "https://via.placeholder.com/400x200/8e73b3/ffffff?text=Prof.+João+Oliveira"
+      }
+    ];
+
+    // Preview da foto
+    function previewFoto() {
+      const fotoUrl = document.getElementById('foto').value;
+      const preview = document.getElementById('fotoPreview');
+      
+      if (fotoUrl) {
+        preview.innerHTML = `<img src="${fotoUrl}" alt="Preview" onerror="this.src='https://via.placeholder.com/200x120/ddd/666?text=Erro+ao+carregar'">`;
+      } else {
+        preview.innerHTML = '📷 Preview da foto aparecerá aqui';
+      }
+    }
+
+    // Submissão do formulário
+    document.getElementById('cadastroPalestrante').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Coletar dados do formulário
+      const nome = document.getElementById('nome').value.trim();
+      const foto = document.getElementById('foto').value.trim();
+      const empresa = document.getElementById('empresa').value.trim();
+      const linkedin = document.getElementById('linkedin').value.trim();
+      const palestra = document.getElementById('palestra').value.trim();
+      
+      // Validação básica
+      if (!nome || !empresa || !palestra) {
+        mostrarMensagem('error', 'Por favor, preencha todos os campos obrigatórios (Nome, Empresa e Palestra).');
+        return;
+      }
+      
+      // Gerar novo ID
+      const novoId = palestrantes.length > 0 ? Math.max(...palestrantes.map(p => p.id)) + 1 : 1;
+      
+      // Criar objeto palestrante
+      const novoPalestrante = {
+        id: novoId,
+        nome: nome,
+        empresa: empresa,
+        linkedin: linkedin || 'Não informado',
+        palestra: palestra,
+        foto: foto || `https://via.placeholder.com/400x200/63adb7/ffffff?text=${encodeURIComponent(nome)}`
+      };
+      
+      // Adicionar à lista
+      palestrantes.push(novoPalestrante);
+      
+      // Mostrar mensagem de sucesso
+      mostrarMensagem('success', `✅ ${nome} foi cadastrado com sucesso!`);
+      
+      // Limpar formulário
+      limparFormulario();
+      
+      // Atualizar lista
+      atualizarListaPalestrantes();
+      
+      // Simular envio para Google Sheets (substituir por integração real)
+      console.log('Enviando para Google Sheets:', novoPalestrante);
+    });
+
+    // Mostrar mensagens
+    function mostrarMensagem(tipo, mensagem) {
+      const successElement = document.getElementById('successMessage');
+      const errorElement = document.getElementById('errorMessage');
+      
+      // Ocultar ambas primeiro
+      successElement.style.display = 'none';
+      errorElement.style.display = 'none';
+      
+      if (tipo === 'success') {
+        successElement.textContent = mensagem;
+        successElement.style.display = 'block';
+        setTimeout(() => {
+          successElement.style.display = 'none';
+        }, 5000);
+      } else {
+        errorElement.textContent = mensagem;
+        errorElement.style.display = 'block';
+        setTimeout(() => {
+          errorElement.style.display = 'none';
+        }, 5000);
+      }
+      
+      // Scroll para o topo
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Limpar formulário
+    function limparFormulario() {
+      document.getElementById('cadastroPalestrante').reset();
+      document.getElementById('fotoPreview').innerHTML = '📷 Preview da foto aparecerá aqui';
+    }
+
+    // Atualizar lista de palestrantes
+    function atualizarListaPalestrantes() {
+      const container = document.getElementById('listaPalestrantes');
+      
+      if (palestrantes.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #666;">Nenhum palestrante cadastrado ainda.</p>';
+        return;
+      }
+      
+      let html = '';
+      palestrantes.forEach(palestrante => {
+        html += `
+          <div class="palestrante-item" id="palestrante-${palestrante.id}">
+            <div class="palestrante-name">${palestrante.nome}</div>
+            <div class="palestrante-details"><strong>Empresa:</strong> ${palestrante.empresa}</div>
+            <div class="palestrante-details"><strong>Palestra:</strong> ${palestrante.palestra}</div>
+            <div class="palestrante-details"><strong>LinkedIn:</strong> ${palestrante.linkedin}</div>
+            <div style="margin-top: 10px;">
+              <button class="btn btn-edit" onclick="editarPalestrante(${palestrante.id})">✏️ Editar</button>
+              <button class="btn btn-delete" onclick="excluirPalestrante(${palestrante.id})">🗑️ Excluir</button>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+
+    // Editar palestrante
+    function editarPalestrante(id) {
+      const palestrante = palestrantes.find(p => p.id === id);
+      if (!palestrante) return;
+      
+      // Preencher formulário com dados do palestrante
+      document.getElementById('nome').value = palestrante.nome;
+      document.getElementById('foto').value = palestrante.foto;
+      document.getElementById('empresa').value = palestrante.empresa;
+      document.getElementById('linkedin').value = palestrante.linkedin;
+      document.getElementById('palestra').value = palestrante.palestra;
+      
+      // Atualizar preview da foto
+      previewFoto();
+      
+      // Remover palestrante da lista para atualização
+      palestrantes = palestrantes.filter(p => p.id !== id);
+      atualizarListaPalestrantes();
+      
+      // Scroll para o formulário
+      document.querySelector('.form-container').scrollIntoView({ behavior: 'smooth' });
+      
+      mostrarMensagem('success', `Dados de ${palestrante.nome} carregados para edição.`);
+    }
+
+    // Excluir palestrante
+    function excluirPalestrante(id) {
+      const palestrante = palestrantes.find(p => p.id === id);
+      if (!palestrante) return;
+      
+      if (confirm(`Tem certeza que deseja excluir ${palestrante.nome}?`)) {
+        palestrantes = palestrantes.filter(p => p.id !== id);
+        atualizarListaPalestrantes();
+        mostrarMensagem('success', `${palestrante.nome} foi removido com sucesso.`);
+      }
+    }
+
+    // Voltar para página de avaliação
+    function voltarParaAvaliacao() {
+      if (confirm('Deseja voltar para a página de avaliações?')) {
+        // Aqui você redirecionaria para a página principal
+        // window.location.href = 'avaliacao.html';
+        alert('Redirecionando para a página de avaliações...');
+      }
+    }
+
+    // Inicializar página
+    document.addEventListener('DOMContentLoaded', function() {
+      atualizarListaPalestrantes();
+    });
+  </script>
+</body>
+</html>
